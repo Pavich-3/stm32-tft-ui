@@ -3,20 +3,23 @@
 #include "stm32l4xx_hal.h"
 #include <cstdint>
 
+struct ILI9341PinConf {
+	GPIO_TypeDef* port;
+	uint16_t pin;
+};
+
 class ILI9341 {
 private:
-	static constexpr uint16_t DC = GPIO_PIN_8;
-	static constexpr uint16_t RESET = GPIO_PIN_9;
-	static constexpr uint16_t CS = GPIO_PIN_10;
-	static constexpr uint16_t LED = GPIO_PIN_11;
-
 	SPI_HandleTypeDef* hspi_;
+	ILI9341PinConf dc_;
+	ILI9341PinConf reset_;
+	ILI9341PinConf cs_;
 
 	void sendCommand(uint8_t cmd);
 	void sendData(uint8_t data);
 
 public:
-	ILI9341(SPI_HandleTypeDef* hspi);
+	ILI9341(SPI_HandleTypeDef* hspi, ILI9341PinConf dc, ILI9341PinConf reset, ILI9341PinConf cs);
 
 	void init();
 };
