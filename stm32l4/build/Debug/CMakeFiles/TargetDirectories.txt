@@ -1,0 +1,6 @@
+/Users/pavich/STM32CubeIDE/workspace_2.1.1/stm32-tft-ui/stm32l4/build/Debug/CMakeFiles/stm32l4.dir
+/Users/pavich/STM32CubeIDE/workspace_2.1.1/stm32-tft-ui/stm32l4/build/Debug/CMakeFiles/edit_cache.dir
+/Users/pavich/STM32CubeIDE/workspace_2.1.1/stm32-tft-ui/stm32l4/build/Debug/CMakeFiles/rebuild_cache.dir
+/Users/pavich/STM32CubeIDE/workspace_2.1.1/stm32-tft-ui/stm32l4/build/Debug/cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir
+/Users/pavich/STM32CubeIDE/workspace_2.1.1/stm32-tft-ui/stm32l4/build/Debug/cmake/stm32cubemx/CMakeFiles/edit_cache.dir
+/Users/pavich/STM32CubeIDE/workspace_2.1.1/stm32-tft-ui/stm32l4/build/Debug/cmake/stm32cubemx/CMakeFiles/rebuild_cache.dir
