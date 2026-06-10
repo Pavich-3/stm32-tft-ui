@@ -20,6 +20,9 @@ ILI9341 ili9341{&hspi1, dc, reset, cs};
 
 void appInit() {
 	ili9341.init();
-	HAL_Delay(500);
-	ili9341.fillScreen(0xF800);
+	ili9341.fillScreen(0x0000);
+	ili9341.drawLine(0, 0, 239, 319, 0xF800);    // діагональ
+	ili9341.drawLine(0, 160, 239, 160, 0x07E0);  // горизонтальна
+	ili9341.drawLine(120, 0, 120, 319, 0x001F);  // вертикальна
+	ili9341.drawRect(50, 50, 100, 100, 0x0008FF);
 }
