@@ -98,5 +98,34 @@ void ILI9341::init() {
 	HAL_Delay(120);
 
 	sendCommand(0x29);  // Display ON
+}
 
+void ILI9341::writeBlock(uint16_t color, uint32_t count) {
+	HAL_GPIO_WritePin(dc_.port, dc_.pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(cs_.port, cs_.pin, GPIO_PIN_RESET);
+	uint8_t msb = (color >> 8) & 0xFF;
+	uint8_t lsb = color & 0xFF;
+	for (uint32_t i = 0; i < count; ++i) {
+		HAL_SPI_Transmit(hspi_, &msb, 1, 1000);
+		HAL_SPI_Transmit(hspi_, &lsb, 1, 1000);
+	}
+	HAL_GPIO_WritePin(cs_.port, cs_.pin, GPIO_PIN_SET);
+}
+
+void ILI9341::fillScreen(uint16_t color) {
+	sendCommand(0x2A);
+	sendData(0);
+	sendData(0);
+	sendData(0);
+	sendData(0xEF);
+
+	sendCommand(0x2B);
+	sendData(0);
+	sendData(0);
+	sendData(0x01);
+	sendData(0x3F);
+
+	sendCommand(0x2C);
+	uint32_t pixelNumbers = 240 * 320;
+	writeBlock(color, pixelNumbers);
 }

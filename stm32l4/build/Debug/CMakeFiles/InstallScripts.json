@@ -1,0 +1,8 @@
+{
+	"InstallScripts" : 
+	[
+		"/Users/pavich/STM32CubeIDE/workspace_2.1.1/stm32-tft-ui/stm32l4/build/Debug/cmake_install.cmake",
+		"/Users/pavich/STM32CubeIDE/workspace_2.1.1/stm32-tft-ui/stm32l4/build/Debug/cmake/stm32cubemx/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

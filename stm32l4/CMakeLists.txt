@@ -53,6 +53,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user sources here
     ${CMAKE_CURRENT_SOURCE_DIR}/driver/ili9341/ILI9341.cpp 
     ${CMAKE_CURRENT_SOURCE_DIR}/driver/xpt2046/XPT2046.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Core/Src/app.cpp
 )
 
 # Add include paths
