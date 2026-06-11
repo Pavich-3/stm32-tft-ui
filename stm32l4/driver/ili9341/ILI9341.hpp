@@ -29,5 +29,7 @@ public:
 	void drawLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint16_t color);
 	void drawRect(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color);
 	void drawCircle(uint16_t cx, uint16_t cy, uint16_t r, uint16_t color);
+	void drawChar(uint16_t x, uint16_t y, uint8_t c, uint16_t color);
+	void drawString(uint16_t x, uint16_t y, const char* str, uint16_t color);
 	void fillScreen(uint16_t color);
 };

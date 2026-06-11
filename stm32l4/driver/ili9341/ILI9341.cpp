@@ -1,5 +1,7 @@
 #include "ILI9341.hpp"
+#include "Font8x8.hpp"
 #include <cmath>
+#include <string.h>
 
 ILI9341::ILI9341(SPI_HandleTypeDef* hspi, ILI9341PinConf dc, ILI9341PinConf reset, ILI9341PinConf cs) :
 	hspi_(hspi), dc_(dc), reset_(reset), cs_(cs) {}
@@ -75,7 +77,7 @@ void ILI9341::init() {
 	sendData(0x86);
 
 	sendCommand(0x36);  // Memory Access Control
-	sendData(0x08);
+	sendData(0x48);
 
 	sendCommand(0x3A);  // Pixel Format — 16 bit
 	sendData(0x55);
@@ -187,6 +189,24 @@ void ILI9341::drawCircle(uint16_t cx, uint16_t cy, uint16_t r, uint16_t color) {
 		drawPixel(cx+y, cy-x, color);
 		drawPixel(cx-y, cy-x, color);
     }
+}
+
+void ILI9341::drawChar(uint16_t x, uint16_t y, uint8_t c, uint16_t color) {
+	const uint8_t* ch = font8x8_basic[c];
+	for (uint8_t i = 0; i < 8; ++i) {
+	    for (uint8_t j = 0; j < 8; ++j) {
+	        if (ch[i] & (0b10000000 >> j)) {
+	        	drawPixel(x + (7 - j), y + i, color);
+	        }
+	    }
+	}
+}
+
+void ILI9341::drawString(uint16_t x, uint16_t y, const char* str, uint16_t color) {
+	uint8_t len = strlen(str);
+	for (uint8_t i = 0; i < len; ++i) {
+		drawChar(x + 8 * i, y, str[i], color);
+	}
 }
 
 void ILI9341::writeBlock(uint16_t color, uint32_t count) {
