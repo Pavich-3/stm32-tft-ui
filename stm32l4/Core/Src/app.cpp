@@ -1,5 +1,7 @@
 #include "app.hpp"
 #include "ILI9341.hpp"
+#include "sample.hpp"
+#include "sample2.hpp"
 
 extern SPI_HandleTypeDef hspi1;
 
@@ -29,4 +31,8 @@ void appInit() {
 	ili9341.drawChar(10, 10, '!', 0x07FF);
 	ili9341.drawChar(200, 200, 'A', 0x07FF);
 	ili9341.drawString(10, 200, "Pavlo Hello", 0x001F);
+	ili9341.drawString(10, 220, "Happy Current Year!", 0x001F);
+	ili9341.drawString(10, 240, "Disconcerted", 0x001F);
+//	ili9341.drawImage(sample_data, sample_width, sample_height);
+	ili9341.drawImage(sample2_data, sample2_width, sample2_height);
 }

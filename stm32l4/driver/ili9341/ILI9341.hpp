@@ -10,6 +10,7 @@ struct ILI9341PinConf {
 
 class ILI9341 {
 private:
+	static constexpr uint32_t maxDMATransmit = 32767;
 	static constexpr uint32_t pixelNumbers = 240 * 320;
 
 	SPI_HandleTypeDef* hspi_;
@@ -20,6 +21,7 @@ private:
 	void sendCommand(uint8_t cmd);
 	void sendData(uint8_t data);
 	void writeBlock(uint16_t color, uint32_t count);
+	void writeDMA(const uint16_t* buf, uint32_t count);
 
 public:
 	ILI9341(SPI_HandleTypeDef* hspi, ILI9341PinConf dc, ILI9341PinConf reset, ILI9341PinConf cs);
@@ -31,5 +33,6 @@ public:
 	void drawCircle(uint16_t cx, uint16_t cy, uint16_t r, uint16_t color);
 	void drawChar(uint16_t x, uint16_t y, uint8_t c, uint16_t color);
 	void drawString(uint16_t x, uint16_t y, const char* str, uint16_t color);
+	void drawImage(const uint16_t* img, uint16_t w, uint16_t h);
 	void fillScreen(uint16_t color);
 };

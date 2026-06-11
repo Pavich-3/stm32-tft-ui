@@ -209,6 +209,24 @@ void ILI9341::drawString(uint16_t x, uint16_t y, const char* str, uint16_t color
 	}
 }
 
+void ILI9341::drawImage(const uint16_t* img, uint16_t w, uint16_t h) {
+	sendCommand(0x2A);
+	sendData(0);
+	sendData(0);
+	sendData(((w - 1) >> 8) & 0xFF);
+	sendData((w - 1) & 0xFF);
+
+	sendCommand(0x2B);
+	sendData(0);
+	sendData(0);
+	sendData(((h - 1) >> 8) & 0xFF);
+	sendData((h - 1) & 0xFF);
+
+	sendCommand(0x2C);
+	uint32_t size = w * h;
+	writeDMA(img, size);
+}
+
 void ILI9341::writeBlock(uint16_t color, uint32_t count) {
 	HAL_GPIO_WritePin(dc_.port, dc_.pin, GPIO_PIN_SET);
 	HAL_GPIO_WritePin(cs_.port, cs_.pin, GPIO_PIN_RESET);
@@ -218,6 +236,25 @@ void ILI9341::writeBlock(uint16_t color, uint32_t count) {
 		HAL_SPI_Transmit(hspi_, &msb, 1, 1000);
 		HAL_SPI_Transmit(hspi_, &lsb, 1, 1000);
 	}
+	HAL_GPIO_WritePin(cs_.port, cs_.pin, GPIO_PIN_SET);
+}
+
+void ILI9341::writeDMA(const uint16_t* buf, uint32_t count) {
+	while (__HAL_SPI_GET_FLAG(hspi_, SPI_FLAG_BSY));
+	HAL_GPIO_WritePin(dc_.port, dc_.pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(cs_.port, cs_.pin, GPIO_PIN_RESET);
+	if (count <= maxDMATransmit) {
+		HAL_SPI_Transmit_DMA(hspi_, reinterpret_cast<const uint8_t*>(buf), count * 2);
+	} else {
+		uint8_t chunks = count / maxDMATransmit;
+		uint32_t remainder = count % maxDMATransmit;
+		for (uint8_t i = 0; i < chunks; ++i) {
+			HAL_SPI_Transmit_DMA(hspi_, reinterpret_cast<const uint8_t*>(buf) + i * maxDMATransmit * 2, maxDMATransmit * 2);
+			while (__HAL_SPI_GET_FLAG(hspi_, SPI_FLAG_BSY));
+		}
+		HAL_SPI_Transmit_DMA(hspi_, reinterpret_cast<const uint8_t*>(buf) + chunks * maxDMATransmit * 2, remainder * 2);
+	}
+	while (__HAL_SPI_GET_FLAG(hspi_, SPI_FLAG_BSY));
 	HAL_GPIO_WritePin(cs_.port, cs_.pin, GPIO_PIN_SET);
 }
 
