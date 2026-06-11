@@ -157,6 +157,38 @@ void ILI9341::drawRect(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t 
 	drawLine(x1, y, x1, y1, color);
 }
 
+void ILI9341::drawCircle(uint16_t cx, uint16_t cy, uint16_t r, uint16_t color) {
+	uint16_t x = 0, y = r;
+    int16_t d = 3 - 2 * r;
+    drawPixel(cx+x, cy+y, color);
+    drawPixel(cx-x, cy+y, color);
+    drawPixel(cx+x, cy-y, color);
+    drawPixel(cx-x, cy-y, color);
+    drawPixel(cx+y, cy+x, color);
+    drawPixel(cx-y, cy+x, color);
+    drawPixel(cx+y, cy-x, color);
+    drawPixel(cx-y, cy-x, color);
+    while (y >= x){
+        if (d > 0) {
+            y--;
+            d = d + 4 * (x - y) + 10;
+        }
+        else
+            d = d + 4 * x + 6;
+
+        x++;
+
+        drawPixel(cx+x, cy+y, color);
+		drawPixel(cx-x, cy+y, color);
+		drawPixel(cx+x, cy-y, color);
+		drawPixel(cx-x, cy-y, color);
+		drawPixel(cx+y, cy+x, color);
+		drawPixel(cx-y, cy+x, color);
+		drawPixel(cx+y, cy-x, color);
+		drawPixel(cx-y, cy-x, color);
+    }
+}
+
 void ILI9341::writeBlock(uint16_t color, uint32_t count) {
 	HAL_GPIO_WritePin(dc_.port, dc_.pin, GPIO_PIN_SET);
 	HAL_GPIO_WritePin(cs_.port, cs_.pin, GPIO_PIN_RESET);

@@ -25,4 +25,5 @@ void appInit() {
 	ili9341.drawLine(0, 160, 239, 160, 0x07E0);  // горизонтальна
 	ili9341.drawLine(120, 0, 120, 319, 0x001F);  // вертикальна
 	ili9341.drawRect(50, 50, 100, 100, 0x0008FF);
+	ili9341.drawCircle(120, 160, 50, 0x07FF);
 }
