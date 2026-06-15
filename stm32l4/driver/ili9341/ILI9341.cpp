@@ -210,21 +210,53 @@ void ILI9341::drawString(uint16_t x, uint16_t y, const char* str, uint16_t color
 }
 
 void ILI9341::drawImage(const uint16_t* img, uint16_t w, uint16_t h) {
-	sendCommand(0x2A);
-	sendData(0);
-	sendData(0);
-	sendData(((w - 1) >> 8) & 0xFF);
-	sendData((w - 1) & 0xFF);
-
-	sendCommand(0x2B);
-	sendData(0);
-	sendData(0);
-	sendData(((h - 1) >> 8) & 0xFF);
-	sendData((h - 1) & 0xFF);
+	setWindow(0, 0, w - 1, h - 1);
 
 	sendCommand(0x2C);
 	uint32_t size = w * h;
 	writeDMA(img, size);
+}
+
+void ILI9341::drawMandelbrot(float centerX, float centerY, float scale) {
+	uint16_t iter = static_cast<uint16_t>(maxIter / scale);
+	iter = (iter > 512) ? 512 : iter;
+	for (uint16_t i = 0; i < rows; ++i) {
+		float cx = centerX + (static_cast<float>(i) / static_cast<float>(rows) - 0.5f) * 2.0f * scale;
+		for (uint16_t j = 0; j < cols; ++j) {
+			float zr = 0, zi = 0, zr2 = 0, zi2 = 0;
+			float cy = -(centerY + (static_cast<float>(j) / static_cast<float>(cols) - 0.5f) * 2.0f * scale);
+
+			uint16_t alpha = 0;
+			while (zr2 + zi2 < 4) {
+				if (alpha > iter) break;
+				float zr_new = zr2 - zi2 + cx;
+				float zi_new = 2 * zr * zi + cy;
+				zr = zr_new;
+				zi = zi_new;
+				zr2 = zr * zr;
+				zi2 = zi * zi;
+				++alpha;
+			}
+			lineBuf[j] = (alpha >= iter) ? 0x0000 : alpha;
+		}
+		setWindow(0, i, cols - 1, i);
+		sendCommand(0x2C);
+		writeDMA(lineBuf, cols);
+	}
+}
+
+void ILI9341::setWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1) {
+	sendCommand(0x2A);
+	sendData((x0 >> 8) & 0xFF);
+	sendData(x0 & 0xFF);
+	sendData((x1 >> 8) & 0xFF);
+	sendData(x1 & 0xFF);
+
+	sendCommand(0x2B);
+	sendData((y0 >> 8) & 0xFF);
+	sendData(y0 & 0xFF);
+	sendData((y1 >> 8) & 0xFF);
+	sendData(y1 & 0xFF);
 }
 
 void ILI9341::writeBlock(uint16_t color, uint32_t count) {
@@ -259,17 +291,7 @@ void ILI9341::writeDMA(const uint16_t* buf, uint32_t count) {
 }
 
 void ILI9341::fillScreen(uint16_t color) {
-	sendCommand(0x2A);
-	sendData(0);
-	sendData(0);
-	sendData(0);
-	sendData(0xEF);
-
-	sendCommand(0x2B);
-	sendData(0);
-	sendData(0);
-	sendData(0x01);
-	sendData(0x3F);
+	setWindow(0, 0, 0xEF, (0x01 << 8) | 0x3F);
 
 	sendCommand(0x2C);
 	writeBlock(color, pixelNumbers);

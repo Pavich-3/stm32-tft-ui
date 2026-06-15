@@ -20,6 +20,8 @@ ILI9341PinConf cs = {
 
 ILI9341 ili9341{&hspi1, dc, reset, cs};
 
+float scale = 2.0f;
+
 void appInit() {
 	ili9341.init();
 	ili9341.fillScreen(0x0000);
@@ -35,4 +37,11 @@ void appInit() {
 	ili9341.drawString(10, 240, "Disconcerted", 0x001F);
 //	ili9341.drawImage(sample_data, sample_width, sample_height);
 	ili9341.drawImage(sample2_data, sample2_width, sample2_height);
+	ili9341.drawMandelbrot(0.5f, 0.0f, 2.0f);
+}
+
+void appLoop() {
+	scale *= 0.95f;
+	if (scale < 0.0001f) scale = 2.0f;
+	ili9341.drawMandelbrot(-1.749f, 0.0f, scale);
 }

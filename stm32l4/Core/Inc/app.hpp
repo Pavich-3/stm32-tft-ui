@@ -5,6 +5,7 @@ extern "C" {
 #endif
 
 void appInit();
+void appLoop();
 
 #ifdef __cplusplus
 }
