@@ -16,7 +16,10 @@ private:
 	static constexpr uint16_t maxIter = 128;
 	static constexpr uint32_t pixelNumbers = static_cast<uint32_t>(rows) * static_cast<uint32_t>(cols);
 
-	uint16_t lineBuf[cols] = {0};
+	volatile bool dmaReady_ = true;
+	volatile bool lastChunk_ = true;
+	volatile uint8_t dmaBufIdx_ = 0;
+	uint16_t lineBuf[2][cols] = { { 0 } };
 
 	SPI_HandleTypeDef* hspi_;
 	ILI9341PinConf dc_;
@@ -26,7 +29,7 @@ private:
 	void sendCommand(uint8_t cmd);
 	void sendData(uint8_t data);
 	void writeBlock(uint16_t color, uint32_t count);
-	void writeDMA(const uint16_t* buf, uint32_t count);
+	void writeDMA(const uint16_t* buf, uint32_t count, bool blocking=false);
 	void setWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1);
 
 public:
@@ -41,5 +44,6 @@ public:
 	void drawString(uint16_t x, uint16_t y, const char* str, uint16_t color);
 	void drawImage(const uint16_t* img, uint16_t w, uint16_t h);
 	void drawMandelbrot(float centerX, float centerY, float scale);
+	void onDmaDone();
 	void fillScreen(uint16_t color);
 };
