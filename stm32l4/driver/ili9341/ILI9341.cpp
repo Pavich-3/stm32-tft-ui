@@ -3,8 +3,8 @@
 #include <cmath>
 #include <string.h>
 
-ILI9341::ILI9341(SPI_HandleTypeDef* hspi, ILI9341PinConf dc, ILI9341PinConf reset, ILI9341PinConf cs) :
-	hspi_(hspi), dc_(dc), reset_(reset), cs_(cs) {}
+ILI9341::ILI9341(SPI_HandleTypeDef* hspi, ILI9341PinConf dc, ILI9341PinConf reset, ILI9341PinConf csili9341, XPT2046PinConf csxpt2046, XPT2046PinConf irq) :
+	hspi_(hspi), dc_(dc), reset_(reset), cs_(csili9341), xpt2046_(hspi, csxpt2046, irq) {}
 
 void ILI9341::sendCommand(uint8_t cmd) {
 	HAL_GPIO_WritePin(dc_.port, dc_.pin, GPIO_PIN_RESET);

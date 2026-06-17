@@ -13,12 +13,19 @@ ILI9341PinConf reset = {
 		.pin = GPIO_PIN_8,
 		.port = GPIOA
 };
-ILI9341PinConf cs = {
+ILI9341PinConf csili9341 = {
 		.pin = GPIO_PIN_10,
 		.port = GPIOA
 };
-
-ILI9341 ili9341{&hspi1, dc, reset, cs};
+XPT2046PinConf csxp2046 = {
+		.pin = GPIO_PIN_0,
+		.port = GPIOB
+};
+XPT2046PinConf irq = {
+		.pin = GPIO_PIN_1,
+		.port = GPIOB
+};
+ILI9341 ili9341{&hspi1, dc, reset, csili9341, csxp2046, irq};
 
 float scale = 2.0f;
 

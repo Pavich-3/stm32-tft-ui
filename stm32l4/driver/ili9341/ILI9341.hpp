@@ -1,6 +1,7 @@
 #pragma once
 
 #include "stm32l4xx_hal.h"
+#include "XPT2046.hpp"
 #include <cstdint>
 
 struct ILI9341PinConf {
@@ -25,6 +26,7 @@ private:
 	ILI9341PinConf dc_;
 	ILI9341PinConf reset_;
 	ILI9341PinConf cs_;
+	XPT2046 xpt2046_;
 
 	void sendCommand(uint8_t cmd);
 	void sendData(uint8_t data);
@@ -33,7 +35,7 @@ private:
 	void setWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1);
 
 public:
-	ILI9341(SPI_HandleTypeDef* hspi, ILI9341PinConf dc, ILI9341PinConf reset, ILI9341PinConf cs);
+	ILI9341(SPI_HandleTypeDef* hspi, ILI9341PinConf dc, ILI9341PinConf reset, ILI9341PinConf csili9341, XPT2046PinConf csxpt2046, XPT2046PinConf irq);
 
 	void init();
 	void drawPixel(uint16_t x, uint16_t y, uint16_t color);
