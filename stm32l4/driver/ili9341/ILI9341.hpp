@@ -16,6 +16,10 @@ private:
 	static constexpr uint32_t maxDMATransmit = 32767;
 	static constexpr uint16_t maxIter = 128;
 	static constexpr uint32_t pixelNumbers = static_cast<uint32_t>(rows) * static_cast<uint32_t>(cols);
+	static constexpr uint16_t kXMin = 309;
+	static constexpr uint16_t kXMax = 1919;
+	static constexpr uint16_t kYMin = 322;
+	static constexpr uint16_t kYMax = 1930;
 
 	volatile bool dmaReady_ = true;
 	volatile bool lastChunk_ = true;
@@ -46,6 +50,7 @@ public:
 	void drawString(uint16_t x, uint16_t y, const char* str, uint16_t color);
 	void drawImage(const uint16_t* img, uint16_t w, uint16_t h);
 	void drawMandelbrot(float centerX, float centerY, float scale);
+	void transferCoordinates();
 	void onDmaDone();
 	void fillScreen(uint16_t color);
 };

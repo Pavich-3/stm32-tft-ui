@@ -302,6 +302,14 @@ void ILI9341::writeDMA(const uint16_t* buf, uint32_t count, bool blocking) {
 	}
 }
 
+void ILI9341::transferCoordinates() {
+	TouchPoint adcPoints = xpt2046_.readCoordinates();
+}
+
+void ILI9341::toScreen() {
+
+}
+
 void ILI9341::fillScreen(uint16_t color) {
 	setWindow(0, 0, 0xEF, (0x01 << 8) | 0x3F);
 

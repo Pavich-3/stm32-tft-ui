@@ -22,6 +22,8 @@ private:
 	XPT2046PinConf cs_;
 	XPT2046PinConf irq_;
 
+	void sendData(uint16_t adcX, uint16_t adcY);
+
 public:
 	XPT2046(SPI_HandleTypeDef* hspi, XPT2046PinConf cs, XPT2046PinConf irq);
 
